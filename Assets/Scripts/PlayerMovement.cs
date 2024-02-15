@@ -10,8 +10,9 @@ public class PlayerMovement : MonoBehaviour
 
 
     [SerializeField] private float xSpeed = 5f;
-
+    
     [SerializeField] private float jumpForce = 300f;
+ 
 
     private Rigidbody2D _rb;
 
@@ -38,8 +39,24 @@ public class PlayerMovement : MonoBehaviour
         _rb.velocity = new Vector2(_xMoveInput, _rb.velocity.y);
         if (_shouldJump )
         {
+
             _rb.AddForce(Vector2.up * jumpForce);
+          
             _shouldJump = false;
+        }
+    }
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("MovingPlatform"))
+        {
+            transform.SetParent(other.transform, true);
+        }
+    }
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("MovingPlatform"))
+        {
+            transform.SetParent(null, true);
         }
     }
 }
